@@ -17,20 +17,22 @@ with open('sample.csv', "r", encoding="utf-8") as csvfile:
     lines = csvfile.readlines()
     for line in lines:
         print(line)
-        if
-        
+        defdf = dictionary.loc[dictionary['b'] == (line.strip()), 'd']
+        hanja = dictionary.loc[dictionary['b'] == (line.strip()), 'j']
+        search_term = urllib.parse.quote(line.strip().encode('utf-8'))
+        baseurl = 'http://endic.naver.com/search_example.nhn?sLn=kr&query='
+        url = baseurl+search_term
+        raw = requests.get(url).text
+        soup = BeautifulSoup(raw, "lxml")
+        sentences_raw = soup.find_all(class_="N=a:xmp.detail", limit=6)
+        sentences = sentences_raw[0].getText()
+        korean_english.extend("{}\t{}".format(line.strip(), hanja, efdf, sentences[0::2]))
+##        
 #makes dataframe of all the definitions for the korean word "line"
 #defdf = dictionary.loc[dictionary['b'] == line, 'd']
 #makes dataframe of hanja (chinese character) of korean word "line"        
 #hanja = dictionary.loc[dictionary['b'] == line, 'j']
 
-#code to pull sample sentences
-#        search_term = urllib.parse.quote(line.strip().encode('utf-8'))
-#        baseurl = 'http://endic.naver.com/search_example.nhn?sLn=kr&query='
-#        url = baseurl+search_term
-#        raw = requests.get(url).text
-#        soup = BeautifulSoup(raw, "lxml")
-#        sentences = soup.find_all(class_="N=a:xmp.detail", limit=6)
 
 
 with open('output.csv', 'w', encoding="utf-8") as output:
